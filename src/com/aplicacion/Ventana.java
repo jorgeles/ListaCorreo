@@ -16,6 +16,11 @@ import javax.swing.SpringLayout;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,9 +50,10 @@ public class Ventana extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Ventana frame = new Ventana();
 					Usuario user = new Usuario();
-					user.prueba();
-					//Ventana frame = new Ventana();
+					user.user="Jorge";
+					frame.AniadirUsuario(user);
 					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -156,5 +162,44 @@ public class Ventana extends JFrame {
 				lblWarningCorreoElectronico, -16, SpringLayout.WEST,
 				lblCorreoElectronico);
 		contentPane.add(lblWarningCorreoElectronico);
+	}
+	
+	public boolean AniadirUsuario(Usuario user) {
+
+		String answer;
+		try {
+			URL gwtServlet = null;
+			gwtServlet = new URL(
+					"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
+			HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
+					.openConnection();
+			servletConnection.setRequestMethod("POST");
+			servletConnection.setDoOutput(true);
+			ObjectOutputStream objOut = new ObjectOutputStream(
+					servletConnection.getOutputStream());
+			
+			objOut.writeInt(1);
+			objOut.writeObject(user);
+			int jorge = 1;
+			objOut.flush();
+			objOut.close();
+
+			answer = servletConnection.getContentType();
+			
+			if(answer.equalsIgnoreCase("1")){
+				return true;
+			}
+			else if(answer.equalsIgnoreCase("0")){
+				return false;
+			}
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 }

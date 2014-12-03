@@ -61,9 +61,7 @@ public class ListaCorreosServlet extends HttpServlet {
 		System.out.println("doPost");
 		ObjectInputStream objIn = new ObjectInputStream(
 				request.getInputStream());
-		
-		
-
+		System.out.println(objIn.readInt());
 		Usuario p = null;
 		try {
 			p = (Usuario) objIn.readObject();
@@ -71,15 +69,16 @@ public class ListaCorreosServlet extends HttpServlet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println(p.user);
 
-		System.out.println("Servlet received p: " + p.user);
 		
-		if(p.user.equalsIgnoreCase("Jorge")){
+		
+		/*if(p.user.equalsIgnoreCase("Jorge")){
 			response.setContentType("JUJUJUJU");
 		}
 		else{
 			response.setContentType("JAJAJAJAJ");
-		}
+		}*/
 	}
 
 }

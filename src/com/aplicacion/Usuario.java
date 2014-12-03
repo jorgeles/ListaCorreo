@@ -9,40 +9,54 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class Usuario implements Serializable {
 	String user;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long IdUsuario;
+	private String email;
+	private String nombre;
+	private String apellidos;
+
 	
-
-	public void prueba() {
-
-		Usuario p = new Usuario();
-		// p.addParameter("TEST", "VALUE");
-
-		try {
-			p.user="Joge";
-			URL gwtServlet = null;
-			gwtServlet = new URL("http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
-			HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
-					.openConnection();
-			servletConnection.setRequestMethod("POST");
-			servletConnection.setDoOutput(true);
-
-			ObjectOutputStream objOut = new ObjectOutputStream(
-					servletConnection.getOutputStream());
-			objOut.writeObject(p);
-			objOut.flush();
-			objOut.close();
-			
-			System.out.println(servletConnection.getContentType());
-
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public long getIdUsuario() {
+		return IdUsuario;
 	}
+
+	public void setIdUsuario(long idUsuario) {
+		IdUsuario = idUsuario;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
 
 }
