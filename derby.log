@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sat Dec 06 11:03:38 CET 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014a-1f0d-fe8b-0000033548f8 
+Sat Dec 06 13:47:18 CET 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014a-1fa3-d54e-00000339c120 
 on database directory /Users/jorgeleonfernandez/db-derby-10.11.1.1-bin/basesDatos/ListaCorreo with class loader sun.misc.Launcher$AppClassLoader@333cb1eb 
 Loaded from file:/Users/jorgeleonfernandez/Documents/workspace/ListaCorreoServlet/lib/derby.jar
 java.vendor=Oracle Corporation

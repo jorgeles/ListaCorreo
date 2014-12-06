@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.FlowLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SpringLayout;
@@ -43,6 +44,8 @@ public class Ventana extends JFrame {
 	private JLabel lblWarningApellidos;
 
 	private JButton btnAniadir;
+	private JButton JBEnviar;
+	private JButton btnMostrarTodos;
 	
 	private BDUsuario datos = new BDUsuario();
 
@@ -72,7 +75,7 @@ public class Ventana extends JFrame {
 		final Pattern pattern = Pattern.compile(PATTERN_EMAIL);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 589, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -110,6 +113,8 @@ public class Ventana extends JFrame {
 		tfCorreoElectronico.setColumns(10);
 
 		btnAniadir = new JButton("Registrar");
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnAniadir, -66,
+				SpringLayout.EAST, contentPane);
 		btnAniadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int correcto = 0;
@@ -143,12 +148,6 @@ public class Ventana extends JFrame {
 
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnAniadir, 115,
-				SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnAniadir, -10,
-				SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnAniadir, -128,
-				SpringLayout.EAST, contentPane);
 		contentPane.add(btnAniadir);
 
 		lblNombre = new JLabel("Nombre");
@@ -202,15 +201,35 @@ public class Ventana extends JFrame {
 		lblWarningApellidos.setForeground(Color.RED);
 		lblWarningApellidos.setVisible(false);
 		contentPane.add(lblWarningApellidos);
+		
+		btnMostrarTodos = new JButton("Mostrar Todos");
+		btnMostrarTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListaUsuarios frame = new ListaUsuarios();
+				frame.setVisible(true);
+			}
+		});
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnMostrarTodos, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAniadir, 0, SpringLayout.NORTH, btnMostrarTodos);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnAniadir, 42, SpringLayout.EAST, btnMostrarTodos);
+		contentPane.add(btnMostrarTodos);
+		
+		JBEnviar = new JButton("Enviar a Todos");
+		JBEnviar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		contentPane.add(JBEnviar);
 	}
 	
 	public boolean AniadirUsuario(Usuario user) {
 		
 		if(this.datos.existeEmail(user.getEmail())){
-			System.out.println("Hola4");
+			JOptionPane.showMessageDialog(null, "¡El Correo Ya Existe! Introduzca otro Por Favor");
 		}
 		else{
 			this.datos.insertar(user);
+			JOptionPane.showMessageDialog(null, "Usuario Creado");
 		}
 
 		/*try {
