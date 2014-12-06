@@ -35,11 +35,12 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 	private SpringLayout sl_fondo;
 	private JButton btnActualizar;
 	private ArrayList<JTextField> textfield;
+	private ArrayList<JButton> deletes;
 	private JTextField textField;
 	private JLabel Nombre;
 	private JLabel Apellidos;
 	private JLabel Email;
-	
+	private int Altura = 900;
 
 	/**
 	 * Create the frame.
@@ -48,17 +49,17 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 		super("Lista Usuarios");
 		getContentPane().setLayout(new SpringLayout());
 		textfield = new ArrayList<JTextField>();
+		deletes = new ArrayList<JButton>();
 		pintar(user);
-		
 
 	}
 
 	public void pintar(List<Usuario> user) {
-		setSize(300, 200);
+		setSize(800, 300);
 		users = user;
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		fondo = new JPanel();
-		fondo.setPreferredSize(new Dimension(1200, 900));
+		fondo.setPreferredSize(new Dimension(200, Altura));
 		fondo.setOpaque(false);
 		scrollpane = new JScrollPane(fondo);
 		sl_fondo = new SpringLayout();
@@ -72,50 +73,65 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 		sl_fondo.putConstraint(SpringLayout.WEST, btnActualizar, 10,
 				SpringLayout.WEST, fondo);
 		fondo.add(btnActualizar);
-		
+
 		Nombre = new JLabel("Nombre");
 		sl_fondo.putConstraint(SpringLayout.NORTH, Nombre, 40,
 				SpringLayout.NORTH, fondo);
 		sl_fondo.putConstraint(SpringLayout.WEST, Nombre, 10,
 				SpringLayout.WEST, fondo);
 		fondo.add(Nombre);
-		
+
 		Apellidos = new JLabel("Apellidos");
 		sl_fondo.putConstraint(SpringLayout.NORTH, Apellidos, 40,
 				SpringLayout.NORTH, fondo);
 		sl_fondo.putConstraint(SpringLayout.WEST, Apellidos, 200,
 				SpringLayout.WEST, fondo);
 		fondo.add(Apellidos);
-		
+
 		Email = new JLabel("Email");
 		sl_fondo.putConstraint(SpringLayout.NORTH, Email, 40,
 				SpringLayout.NORTH, fondo);
 		sl_fondo.putConstraint(SpringLayout.WEST, Email, 400,
 				SpringLayout.WEST, fondo);
 		fondo.add(Email);
-		
-		
-		for(Usuario usuario :users){
-			int p=2;
-			for(int i=0; i<3;i++){
+		int p = 2;
+		for (Usuario usuario : users) {
+			for (int i = 0; i < 3; i++) {
 				JTextField jt = new JTextField();
 				jt.setColumns(10);
-				jt.setText(usuario.getNombre());
-				sl_fondo.putConstraint(SpringLayout.NORTH, jt, 30*p,
+				if (i == 0) {
+					jt.setText(usuario.getNombre());
+				} else if (i == 1) {
+					jt.setText(usuario.getApellidos());
+				} else {
+					jt.setText(usuario.getEmail());
+				}
+				sl_fondo.putConstraint(SpringLayout.NORTH, jt, 40 * p,
 						SpringLayout.NORTH, fondo);
-				sl_fondo.putConstraint(SpringLayout.WEST, jt, 200*i,
+				sl_fondo.putConstraint(SpringLayout.WEST, jt, 200 * i,
 						SpringLayout.WEST, fondo);
 				fondo.add(jt);
 				textfield.add(jt);
 			}
+			JButton jb = new JButton("Eliminar");
+			sl_fondo.putConstraint(SpringLayout.NORTH, jb, 40 * p,
+					SpringLayout.NORTH, fondo);
+			sl_fondo.putConstraint(SpringLayout.WEST, jb, 200 * 3,
+					SpringLayout.WEST, fondo);
+			jb.addActionListener(this);
+			jb.setActionCommand(Integer.toString(p-1));
+			fondo.add(jb);
+			deletes.add(jb);
 			p++;
+			if(p%22==1){
+				Altura = Altura*2;
+				fondo.setPreferredSize(new Dimension(200, Altura));
+			}
 		}
 
 		this.scrollpane.getViewport().setOpaque(false);
 		this.scrollpane.setOpaque(false);
 		getContentPane().add(scrollpane, BorderLayout.CENTER);
-		
-		
 
 		/*
 		 * setSize(300, 200); String titulos[] = { "Nombre", "Apellidos",
