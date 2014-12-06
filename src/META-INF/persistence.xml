@@ -8,10 +8,12 @@
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
       <property name="javax.persistence.jdbc.url"
         value="jdbc:derby:/Users/jorgeleonfernandez/db-derby-10.11.1.1-bin/basesDatos/ListaCorreo;create=true" />
-      <property name="javax.persistence.jdbc.password" value="test" />
+      <property name="javax.persistence.jdbc.email" value="test" />
+      <property name="javax.persistence.jdbc.nombre" value="test" />
+      <property name="javax.persistence.jdbc.apellidos" value="test" />
  
       <!-- EclipseLink debe crear este esquema de base de datos automaticamente -->
-      <property name="eclipselink.ddl-generation" value="create-tables" />
+      <!--  <property name="eclipselink.ddl-generation" value="create-tables" /> -->
       <property name="eclipselink.ddl-generation.output-mode"
         value="database" />
     </properties>

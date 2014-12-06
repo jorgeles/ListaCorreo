@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 
+import java.awt.Color;
+
 public class Ventana extends JFrame {
 
 	private JPanel contentPane;
@@ -37,8 +39,12 @@ public class Ventana extends JFrame {
 	private JLabel lblApellidos;
 	private JLabel lblCorreoElectronico;
 	private JLabel lblWarningCorreoElectronico;
+	private JLabel lblWarningNombre;
+	private JLabel lblWarningApellidos;
 
 	private JButton btnAniadir;
+	
+	private BDUsuario datos = new BDUsuario();
 
 	private static final String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -51,10 +57,7 @@ public class Ventana extends JFrame {
 			public void run() {
 				try {
 					Ventana frame = new Ventana();
-					Usuario user = new Usuario();
-					user.user="Jorge";
-					frame.AniadirUsuario(user);
-					//frame.setVisible(true);
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -109,11 +112,33 @@ public class Ventana extends JFrame {
 		btnAniadir = new JButton("Registrar");
 		btnAniadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int correcto = 0;
 				Matcher matcher = pattern.matcher(tfCorreoElectronico.getText());
 				if (!matcher.matches()) {
 					lblWarningCorreoElectronico.setVisible(true);
+					
 				} else {
 					lblWarningCorreoElectronico.setVisible(false);
+					correcto++;
+				}
+				if (tfNombre.getText().isEmpty()) {
+					lblWarningNombre.setVisible(true);
+				} else {
+					lblWarningNombre.setVisible(false);
+					correcto++;
+				}
+				if (tfApellidos.getText().isEmpty()) {
+					lblWarningApellidos.setVisible(true);
+				} else {
+					lblWarningApellidos.setVisible(false);
+					correcto++;
+				}
+				if(correcto>=3){
+					Usuario user = new Usuario();
+					user.setApellidos(tfApellidos.getText());
+					user.setNombre(tfNombre.getText());
+					user.setEmail(tfCorreoElectronico.getText());
+					AniadirUsuario(user);
 				}
 
 			}
@@ -154,6 +179,7 @@ public class Ventana extends JFrame {
 		contentPane.add(lblCorreoElectronico);
 
 		lblWarningCorreoElectronico = new JLabel("Correo Electronico No Válido");
+		lblWarningCorreoElectronico.setForeground(Color.RED);
 		lblWarningCorreoElectronico.setVisible(false);
 		sl_contentPane.putConstraint(SpringLayout.NORTH,
 				lblWarningCorreoElectronico, 0, SpringLayout.NORTH,
@@ -162,12 +188,32 @@ public class Ventana extends JFrame {
 				lblWarningCorreoElectronico, -16, SpringLayout.WEST,
 				lblCorreoElectronico);
 		contentPane.add(lblWarningCorreoElectronico);
+		
+		lblWarningNombre = new JLabel("Introduzca un Nombre");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningNombre, 6, SpringLayout.NORTH, tfNombre);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningNombre, -24, SpringLayout.WEST, lblNombre);
+		lblWarningNombre.setForeground(Color.RED);
+		lblWarningNombre.setVisible(false);
+		contentPane.add(lblWarningNombre);
+		
+		lblWarningApellidos = new JLabel("Introduzca Apellidos");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningApellidos, 6, SpringLayout.NORTH, tfApellidos);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningApellidos, -20, SpringLayout.WEST, lblApellidos);
+		lblWarningApellidos.setForeground(Color.RED);
+		lblWarningApellidos.setVisible(false);
+		contentPane.add(lblWarningApellidos);
 	}
 	
 	public boolean AniadirUsuario(Usuario user) {
+		
+		if(this.datos.existeEmail(user.getEmail())){
+			System.out.println("Hola4");
+		}
+		else{
+			this.datos.insertar(user);
+		}
 
-		String answer;
-		try {
+		/*try {
 			URL gwtServlet = null;
 			gwtServlet = new URL(
 					"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
@@ -180,11 +226,10 @@ public class Ventana extends JFrame {
 			
 			objOut.writeInt(1);
 			objOut.writeObject(user);
-			int jorge = 1;
 			objOut.flush();
 			objOut.close();
 
-			answer = servletConnection.getContentType();
+			String answer = servletConnection.getContentType();
 			
 			if(answer.equalsIgnoreCase("1")){
 				return true;
@@ -199,7 +244,7 @@ public class Ventana extends JFrame {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return true;
 	}
 }
