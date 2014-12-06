@@ -41,7 +41,7 @@ public class ListaCorreosServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String url = "/index.html";
+		// String url = "/index.html";
 
 		// Obtener la accion a partir de "peticion" (getParameter("action");
 
@@ -61,24 +61,23 @@ public class ListaCorreosServlet extends HttpServlet {
 		System.out.println("doPost");
 		ObjectInputStream objIn = new ObjectInputStream(
 				request.getInputStream());
-		System.out.println(objIn.readInt());
-		Usuario p = null;
-		try {
-			p = (Usuario) objIn.readObject();
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		System.out.println(p.user);
-
 		
-		
-		/*if(p.user.equalsIgnoreCase("Jorge")){
-			response.setContentType("JUJUJUJU");
+		if (objIn.readInt() == 1) {
+			Usuario user = null;
+			try {
+				user = (Usuario) objIn.readObject();
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			//System.out.println(user.user);
 		}
-		else{
-			response.setContentType("JAJAJAJAJ");
-		}*/
+
+		/*
+		 * if(p.user.equalsIgnoreCase("Jorge")){
+		 * response.setContentType("JUJUJUJU"); } else{
+		 * response.setContentType("JAJAJAJAJ"); }
+		 */
 	}
 
 }
