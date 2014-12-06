@@ -20,6 +20,12 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.GridLayout;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +73,7 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 
 		btnActualizar = new JButton("Actualizar");
 		btnActualizar.addActionListener(this);
-		btnActualizar.setActionCommand("a");
+		btnActualizar.setActionCommand("actualizar");
 		sl_fondo.putConstraint(SpringLayout.NORTH, btnActualizar, 10,
 				SpringLayout.NORTH, fondo);
 		sl_fondo.putConstraint(SpringLayout.WEST, btnActualizar, 10,
@@ -158,16 +164,41 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().toString().equals("Modificar")) {
+		if (e.getActionCommand().toString().equals("actualizar")) {
 
 		} else {
 			// datos.eliminar(users.get(Integer.parseInt(e.getActionCommand().toString())));
-			repaint();
-			Component[] componentes = this.getComponents();
-
-			for (int i = 0; i < componentes.length; i++) {
-				System.out.println(componentes[i].getClass());
+			int position = Integer.parseInt(e.getActionCommand().toString())-1;
+			Usuario user = new Usuario();
+			user.setNombre(this.textfield.get(position).getText().toString());
+			user.setApellidos(this.textfield.get(position+1).getText().toString());
+			user.setEmail(this.textfield.get(position+2).getText().toString());
+			try {
+				URL gwtServlet = null;
+				gwtServlet = new URL(
+						"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
+				HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
+						.openConnection();
+				servletConnection.setUseCaches(false);
+				servletConnection.setRequestMethod("POST");
+				servletConnection.setDoOutput(true);
+				ObjectOutputStream objOut = new ObjectOutputStream(
+						servletConnection.getOutputStream());
+				objOut.writeObject(user);
+				objOut.writeInt(3);
+				objOut.flush();
+				objOut.close();				
+				
+				servletConnection.disconnect();
+			} catch (MalformedURLException s) {
+				// TODO Auto-generated catch block
+				s.printStackTrace();
+			} catch (IOException s) {
+				// TODO Auto-generated catch block
+				s.printStackTrace();
 			}
+			repaint();
+			
 		}
 	}
 }

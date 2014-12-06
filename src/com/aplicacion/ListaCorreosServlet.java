@@ -73,6 +73,17 @@ public class ListaCorreosServlet extends HttpServlet {
 			objOut.flush();
 			objOut.close();
 		}
+		
+		else if(codigo == 3){
+			Usuario user = null;
+			try {
+				user = (Usuario) objIn.readObject();
+				datos.eliminar(user);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+		}
 
 	}
 }
