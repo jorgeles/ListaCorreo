@@ -18,10 +18,12 @@ import javax.swing.SpringLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +48,7 @@ public class Ventana extends JFrame {
 	private JButton btnAniadir;
 	private JButton JBEnviar;
 	private JButton btnMostrarTodos;
-	
+
 	private BDUsuario datos = new BDUsuario();
 
 	private static final String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -121,7 +123,7 @@ public class Ventana extends JFrame {
 				Matcher matcher = pattern.matcher(tfCorreoElectronico.getText());
 				if (!matcher.matches()) {
 					lblWarningCorreoElectronico.setVisible(true);
-					
+
 				} else {
 					lblWarningCorreoElectronico.setVisible(false);
 					correcto++;
@@ -138,16 +140,17 @@ public class Ventana extends JFrame {
 					lblWarningApellidos.setVisible(false);
 					correcto++;
 				}
-				if(correcto>=3){
+				if (correcto >= 3) {
 					Usuario user = new Usuario();
 					user.setApellidos(tfApellidos.getText());
 					user.setNombre(tfNombre.getText());
 					user.setEmail(tfCorreoElectronico.getText());
-					if(AniadirUsuario(user)){
+					if (AniadirUsuario(user)) {
 						JOptionPane.showMessageDialog(null, "Usuario Creado");
-					}
-					else{
-						JOptionPane.showMessageDialog(null, "¡El Correo Ya Existe! Introduzca otro Por Favor");
+					} else {
+						JOptionPane
+								.showMessageDialog(null,
+										"¡El Correo Ya Existe! Introduzca otro Por Favor");
 					}
 				}
 
@@ -192,33 +195,39 @@ public class Ventana extends JFrame {
 				lblWarningCorreoElectronico, -16, SpringLayout.WEST,
 				lblCorreoElectronico);
 		contentPane.add(lblWarningCorreoElectronico);
-		
+
 		lblWarningNombre = new JLabel("Introduzca un Nombre");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningNombre, 6, SpringLayout.NORTH, tfNombre);
-		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningNombre, -24, SpringLayout.WEST, lblNombre);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningNombre, 6,
+				SpringLayout.NORTH, tfNombre);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningNombre, -24,
+				SpringLayout.WEST, lblNombre);
 		lblWarningNombre.setForeground(Color.RED);
 		lblWarningNombre.setVisible(false);
 		contentPane.add(lblWarningNombre);
-		
+
 		lblWarningApellidos = new JLabel("Introduzca Apellidos");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningApellidos, 6, SpringLayout.NORTH, tfApellidos);
-		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningApellidos, -20, SpringLayout.WEST, lblApellidos);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblWarningApellidos,
+				6, SpringLayout.NORTH, tfApellidos);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblWarningApellidos,
+				-20, SpringLayout.WEST, lblApellidos);
 		lblWarningApellidos.setForeground(Color.RED);
 		lblWarningApellidos.setVisible(false);
 		contentPane.add(lblWarningApellidos);
-		
+
 		btnMostrarTodos = new JButton("Mostrar Todos");
 		btnMostrarTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListaUsuarios frame = new ListaUsuarios();
-				frame.setVisible(true);
+				MostrarUsuarios();
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnMostrarTodos, -10, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAniadir, 0, SpringLayout.NORTH, btnMostrarTodos);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnAniadir, 42, SpringLayout.EAST, btnMostrarTodos);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnMostrarTodos, -10,
+				SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAniadir, 0,
+				SpringLayout.NORTH, btnMostrarTodos);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnAniadir, 42,
+				SpringLayout.EAST, btnMostrarTodos);
 		contentPane.add(btnMostrarTodos);
-		
+
 		JBEnviar = new JButton("Enviar a Todos");
 		JBEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -226,44 +235,35 @@ public class Ventana extends JFrame {
 		});
 		contentPane.add(JBEnviar);
 	}
-	
-	public boolean AniadirUsuario(Usuario user) {
-		
-		/*if(this.datos.existeEmail(user.getEmail())){
-			JOptionPane.showMessageDialog(null, "¡El Correo Ya Existe! Introduzca otro Por Favor");
-		}
-		else{
-			this.datos.insertar(user);
-			JOptionPane.showMessageDialog(null, "Usuario Creado");
-		}*/
 
+	public boolean AniadirUsuario(Usuario user) {
 		try {
 			URL gwtServlet = null;
 			gwtServlet = new URL(
 					"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
 			HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
 					.openConnection();
+			servletConnection.setUseCaches(false);
 			servletConnection.setRequestMethod("POST");
 			servletConnection.setDoOutput(true);
 			ObjectOutputStream objOut = new ObjectOutputStream(
 					servletConnection.getOutputStream());
-			
+
 			objOut.writeInt(1);
 			objOut.writeObject(user);
 			objOut.flush();
 			objOut.close();
 
 			String answer = servletConnection.getContentType();
-			
-			if(answer.equalsIgnoreCase("Correcto")){
+
+			if (answer.equalsIgnoreCase("Correcto")) {
 				System.out.println(answer);
 				return true;
-			}
-			else if(answer.equalsIgnoreCase("Existe")){
+			} else if (answer.equalsIgnoreCase("Existe")) {
 				System.out.println(answer);
 				return false;
 			}
-
+			servletConnection.disconnect();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -272,5 +272,47 @@ public class Ventana extends JFrame {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public void MostrarUsuarios() {
+		try {
+			URL gwtServlet = null;
+			gwtServlet = new URL(
+					"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
+			HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
+					.openConnection();
+			servletConnection.setUseCaches(false);
+			servletConnection.setRequestMethod("POST");
+			servletConnection.setDoOutput(true);
+			ObjectOutputStream objOut = new ObjectOutputStream(
+					servletConnection.getOutputStream());
+
+			objOut.writeInt(2);
+			objOut.flush();
+			objOut.close();
+
+			ObjectInputStream objIn = new ObjectInputStream(
+					servletConnection.getInputStream());
+			List<Usuario> user;
+			
+			try {
+				user = (List<Usuario>) objIn.readObject();
+				System.out.println("J"+user);
+				ListaUsuarios frame = new ListaUsuarios(user);
+				frame.setVisible(true);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			servletConnection.disconnect();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

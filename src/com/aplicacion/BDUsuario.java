@@ -21,7 +21,7 @@ public class BDUsuario {
 		Query q = em
 				.createQuery("SELECT u from Usuario u WHERE u.email = :email");
 		q.setParameter("email", email);
-
+		
 		List<Usuario> listaUsuario = q.getResultList();
 		for (Usuario lista : listaUsuario) {
 			if (lista.getEmail().equals(email)) {
@@ -67,6 +67,7 @@ public class BDUsuario {
 		q.setParameter("email", email);
 		List<Usuario> listaUsuario = q.getResultList();
 		for (Usuario lista : listaUsuario) {
+			System.out.println(lista.getEmail());
 			if (lista.getEmail().equals(email)) {
 				em.remove(lista);
 				
