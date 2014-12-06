@@ -125,7 +125,7 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 			sl_fondo.putConstraint(SpringLayout.WEST, jb, 200 * 3,
 					SpringLayout.WEST, fondo);
 			jb.addActionListener(this);
-			jb.setActionCommand(Integer.toString(p-1));
+			jb.setActionCommand(Integer.toString((p-1)*3));
 			fondo.add(jb);
 			deletes.add(jb);
 			p++;
@@ -138,28 +138,6 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 		this.scrollpane.getViewport().setOpaque(false);
 		this.scrollpane.setOpaque(false);
 		getContentPane().add(scrollpane, BorderLayout.CENTER);
-
-		/*
-		 * setSize(300, 200); String titulos[] = { "Nombre", "Apellidos",
-		 * "Email"," " }; users = user; p = new JPanel(); p.setSize(600, 400);
-		 * p.setLayout(new GridLayout(users.size() + 2, 4, 10, 10)); for (int
-		 * row = 0; row < users.size(); row++) { if (row == 0) { for (int col =
-		 * 0; col < 4; col++) { p.add(new JLabel(titulos[col]));
-		 * 
-		 * } }
-		 * 
-		 * p.add(new JTextField(users.get(row).getNombre())); p.add(new
-		 * JTextField(users.get(row).getApellidos())); p.add(new
-		 * JTextField(users.get(row).getEmail())); JButton j = new
-		 * JButton("Eliminar"); j.addActionListener(this);
-		 * j.setActionCommand(Integer.toString(row)); p.add(j);
-		 * 
-		 * } JButton j = new JButton("Modificar"); j.addActionListener(this);
-		 * j.setActionCommand("Modificar");
-		 * 
-		 * p.add(j); scrollpane = new JScrollPane(p);
-		 * getContentPane().add(scrollpane, BorderLayout.CENTER);
-		 */
 		setVisible(true);
 	}
 
@@ -170,9 +148,9 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 			// datos.eliminar(users.get(Integer.parseInt(e.getActionCommand().toString())));
 			int position = Integer.parseInt(e.getActionCommand().toString())-1;
 			Usuario user = new Usuario();
-			user.setNombre(this.textfield.get(position).getText().toString());
-			user.setApellidos(this.textfield.get(position+1).getText().toString());
-			user.setEmail(this.textfield.get(position+2).getText().toString());
+			user.setNombre(this.textfield.get(position-2).getText().toString());
+			user.setApellidos(this.textfield.get(position-1).getText().toString());
+			user.setEmail(this.textfield.get(position).getText().toString());
 			try {
 				URL gwtServlet = null;
 				gwtServlet = new URL(
@@ -184,10 +162,12 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 				servletConnection.setDoOutput(true);
 				ObjectOutputStream objOut = new ObjectOutputStream(
 						servletConnection.getOutputStream());
-				objOut.writeObject(user);
 				objOut.writeInt(3);
+				objOut.writeObject(user);
 				objOut.flush();
-				objOut.close();				
+				objOut.close();		
+				
+				String answer = servletConnection.getContentType();
 				
 				servletConnection.disconnect();
 			} catch (MalformedURLException s) {
@@ -197,7 +177,14 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				s.printStackTrace();
 			}
+
+			fondo.remove(this.textfield.get(position-2));
+			fondo.remove(this.textfield.get(position-1));
+			fondo.remove(this.textfield.get(position));
+			fondo.remove(this.deletes.get(position/3));
+			fondo.repaint();
 			repaint();
+			
 			
 		}
 	}

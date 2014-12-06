@@ -65,6 +65,7 @@ public class BDUsuario {
 		Query q = em
 				.createQuery("SELECT u FROM Usuario u WHERE u.email = :email ");
 		q.setParameter("email", email);
+		System.out.println("JAJAJ");
 		List<Usuario> listaUsuario = q.getResultList();
 		for (Usuario lista : listaUsuario) {
 			System.out.println(lista.getEmail());
