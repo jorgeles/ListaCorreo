@@ -46,30 +46,23 @@ public class ListaCorreosServlet extends HttpServlet {
 
 		ObjectInputStream objIn = new ObjectInputStream(
 				request.getInputStream());
-		System.out.println("Hola");
 		if (objIn.readInt() == 1) {
 			Usuario user = null;
-			System.out.println("Hola2");
 			try {
 				user = (Usuario) objIn.readObject();
 
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Hola3");
-			if(this.datos.existeEmail(user.getEmail())){
-				System.out.println("Hola4");
+
+			if (this.datos.existeEmail(user.getEmail())) {
+				response.setContentType("Existe");
+			} else {
+				response.setContentType("Correcto");;
 			}
-			else{
-				
-			}
+			
+			 
 		}
 
-		/*
-		 * if(p.user.equalsIgnoreCase("Jorge")){
-		 * response.setContentType("JUJUJUJU"); } else{
-		 * response.setContentType("JAJAJAJAJ"); }
-		 */
 	}
-
 }

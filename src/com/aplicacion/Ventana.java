@@ -143,7 +143,12 @@ public class Ventana extends JFrame {
 					user.setApellidos(tfApellidos.getText());
 					user.setNombre(tfNombre.getText());
 					user.setEmail(tfCorreoElectronico.getText());
-					AniadirUsuario(user);
+					if(AniadirUsuario(user)){
+						JOptionPane.showMessageDialog(null, "Usuario Creado");
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "¡El Correo Ya Existe! Introduzca otro Por Favor");
+					}
 				}
 
 			}
@@ -224,15 +229,15 @@ public class Ventana extends JFrame {
 	
 	public boolean AniadirUsuario(Usuario user) {
 		
-		if(this.datos.existeEmail(user.getEmail())){
+		/*if(this.datos.existeEmail(user.getEmail())){
 			JOptionPane.showMessageDialog(null, "¡El Correo Ya Existe! Introduzca otro Por Favor");
 		}
 		else{
 			this.datos.insertar(user);
 			JOptionPane.showMessageDialog(null, "Usuario Creado");
-		}
+		}*/
 
-		/*try {
+		try {
 			URL gwtServlet = null;
 			gwtServlet = new URL(
 					"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
@@ -250,10 +255,12 @@ public class Ventana extends JFrame {
 
 			String answer = servletConnection.getContentType();
 			
-			if(answer.equalsIgnoreCase("1")){
+			if(answer.equalsIgnoreCase("Correcto")){
+				System.out.println(answer);
 				return true;
 			}
-			else if(answer.equalsIgnoreCase("0")){
+			else if(answer.equalsIgnoreCase("Existe")){
+				System.out.println(answer);
 				return false;
 			}
 
@@ -263,7 +270,7 @@ public class Ventana extends JFrame {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
-		return true;
+		}
+		return false;
 	}
 }
