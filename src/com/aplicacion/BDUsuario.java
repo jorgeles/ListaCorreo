@@ -56,9 +56,6 @@ public class BDUsuario {
 			String apellidos = newusuario.get(i).getApellidos();
 			String oldemail = usuario.get(i).getEmail();
 
-			System.out
-					.println(apellidos + "  " + usuario.get(i).getApellidos());
-
 			EntityManager em = factoria.createEntityManager();
 			EntityTransaction updateTransaction = em.getTransaction();
 			updateTransaction.begin();
@@ -85,7 +82,6 @@ public class BDUsuario {
 		System.out.println("JAJAJ");
 		List<Usuario> listaUsuario = q.getResultList();
 		for (Usuario lista : listaUsuario) {
-			System.out.println(lista.getEmail());
 			if (lista.getEmail().equals(email)) {
 				em.remove(lista);
 

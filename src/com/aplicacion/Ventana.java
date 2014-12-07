@@ -231,6 +231,8 @@ public class Ventana extends JFrame {
 		JBEnviar = new JButton("Enviar a Todos");
 		JBEnviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Enviar frame = new Enviar();
+				frame.setVisible(true);
 			}
 		});
 		contentPane.add(JBEnviar);

@@ -9,15 +9,19 @@ import java.net.Authenticator;
 import java.util.*;
 
 public class EnviadorMail {
-	final String miCorreo = "micorreo@gmail.com";
-	final String miContraseña = "*******";
-	final String servidorSMTP = "smtp.gmail.com";
-	final String puertoEnvio = "465";
-	String mailReceptor = null;
-	String asunto = null;
-	String cuerpo = null;
+	private String miCorreo = "micorreo@gmail.com";
+	private String miContraseña = "*******";
+	private String servidorSMTP = "smtp.gmail.com";
+	private String puertoEnvio = "465";
+	private String mailReceptor = null;
+	private String asunto = null;
+	private String cuerpo = null;
 
-	public EnviadorMail(String mailReceptor, String asunto, String cuerpo) {
+	public void Enviar(String correo, String SMTP, String password,
+			String mailReceptor, String asunto, String cuerpo) {
+		this.miCorreo=correo;
+		this.servidorSMTP=SMTP;
+		this.miContraseña=password;
 		this.mailReceptor = mailReceptor;
 		this.asunto = asunto;
 		this.cuerpo = cuerpo;
@@ -33,7 +37,7 @@ public class EnviadorMail {
 				"javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
 
-		//SecurityManager security = System.getSecurityManager();
+		// SecurityManager security = System.getSecurityManager();
 
 		try {
 			autentificadorSMTP auth = new autentificadorSMTP();

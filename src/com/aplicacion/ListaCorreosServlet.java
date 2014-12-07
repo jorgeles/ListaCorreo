@@ -73,8 +73,8 @@ public class ListaCorreosServlet extends HttpServlet {
 			objOut.flush();
 			objOut.close();
 		}
-		
-		else if(codigo == 3){
+
+		else if (codigo == 3) {
 			Usuario user = null;
 			try {
 				user = (Usuario) objIn.readObject();
@@ -83,20 +83,47 @@ public class ListaCorreosServlet extends HttpServlet {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-		
-		else if(codigo == 4){
+
+		else if (codigo == 4) {
 			List<Usuario> newuser = null;
 			List<Usuario> user = null;
 			try {
 				newuser = (List<Usuario>) objIn.readObject();
 				user = (List<Usuario>) objIn.readObject();
-				datos.actualizar(user,newuser);
+				datos.actualizar(user, newuser);
 				response.setContentType("Done");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
+		}
+
+		else if (codigo == 5) {
+			String email;
+			String SMTP;
+			String password;
+			String Asunto;
+			String texto;
+			try {
+				email = (String) objIn.readObject();
+				SMTP = (String) objIn.readObject();
+				password = (String) objIn.readObject();
+				Asunto = (String) objIn.readObject();
+				texto = (String) objIn.readObject();
+
+				List<Usuario> user = this.datos.mostrarUsuarios();
+				EnviadorMail enviar = new EnviadorMail();
+				for (int i = 0; i < user.size(); i++) {
+					enviar.Enviar(email, SMTP, password, user.get(i).getEmail(), Asunto,
+							texto);
+				}
+				response.setContentType("Done");
+				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			
 		}
 
 	}
