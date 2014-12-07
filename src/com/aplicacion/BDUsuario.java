@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
@@ -17,11 +18,10 @@ public class BDUsuario {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		EntityManager em = factoria.createEntityManager();
-		// leer las entradas existentes y escribir en la consola
 		Query q = em
 				.createQuery("SELECT u from Usuario u WHERE u.email = :email");
 		q.setParameter("email", email);
-		
+
 		List<Usuario> listaUsuario = q.getResultList();
 		for (Usuario lista : listaUsuario) {
 			if (lista.getEmail().equals(email)) {
@@ -47,13 +47,30 @@ public class BDUsuario {
 		em.close();
 	}
 
-	public void actualizar(Usuario usuario) {
+	public void actualizar(List<Usuario> usuario, List<Usuario> newusuario) {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-		EntityManager em = factoria.createEntityManager();
-		// leer las entradas existentes y escribir en la consola
-		Query q = em.createQuery("SELECT u from Usuario u");
-		List<Usuario> listaUsuario = q.getResultList();
+		for (int i = 0; i < newusuario.size(); i++) {
+			String email = newusuario.get(i).getEmail();
+			String nombre = newusuario.get(i).getNombre();
+			String apellidos = newusuario.get(i).getApellidos();
+			String oldemail = usuario.get(i).getEmail();
+
+			System.out
+					.println(apellidos + "  " + usuario.get(i).getApellidos());
+
+			EntityManager em = factoria.createEntityManager();
+			EntityTransaction updateTransaction = em.getTransaction();
+			updateTransaction.begin();
+			Query q = em
+					.createQuery("UPDATE Usuario u SET u.email = :email, u.apellidos = :apellidos, u.nombre= :nombre WHERE u.email = :oldemail");
+			q.setParameter("email", email);
+			q.setParameter("apellidos", apellidos);
+			q.setParameter("nombre", nombre);
+			q.setParameter("oldemail", oldemail);
+			q.executeUpdate();
+			updateTransaction.commit();
+		}
 	}
 
 	public void eliminar(Usuario usuario) {
@@ -71,8 +88,7 @@ public class BDUsuario {
 			System.out.println(lista.getEmail());
 			if (lista.getEmail().equals(email)) {
 				em.remove(lista);
-				
-				
+
 			}
 		}
 		em.getTransaction().commit();

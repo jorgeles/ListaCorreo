@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -125,12 +126,12 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 			sl_fondo.putConstraint(SpringLayout.WEST, jb, 200 * 3,
 					SpringLayout.WEST, fondo);
 			jb.addActionListener(this);
-			jb.setActionCommand(Integer.toString((p-1)*3));
+			jb.setActionCommand(Integer.toString((p - 1) * 3));
 			fondo.add(jb);
 			deletes.add(jb);
 			p++;
-			if(p%22==1){
-				Altura = Altura*2;
+			if (p % 22 == 1) {
+				Altura = Altura * 2;
 				fondo.setPreferredSize(new Dimension(200, Altura));
 			}
 		}
@@ -144,12 +145,61 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().toString().equals("actualizar")) {
 
+			List<Usuario> newuser = new ArrayList<Usuario>();
+			
+			for (int i = 0; i < this.textfield.size(); i++) {
+				Usuario aux = new Usuario();
+				aux.setNombre(this.textfield.get(i).getText().toString());
+				aux.setApellidos(this.textfield.get(i + 1).getText().toString());
+				aux.setEmail(this.textfield.get(i + 2).getText().toString());
+				i = i + 2;
+				newuser.add(aux);
+			}
+
+			try {
+				URL gwtServlet = null;
+				gwtServlet = new URL(
+						"http://localhost:8080/ListaCorreoServlet/ListaCorreosServlet");
+				HttpURLConnection servletConnection = (HttpURLConnection) gwtServlet
+						.openConnection();
+				servletConnection.setUseCaches(false);
+				servletConnection.setRequestMethod("POST");
+				servletConnection.setDoOutput(true);
+				ObjectOutputStream objOut = new ObjectOutputStream(
+						servletConnection.getOutputStream());
+				objOut.writeInt(4);
+				objOut.writeObject(newuser);
+				objOut.writeObject(users);
+				objOut.flush();
+				objOut.close();
+
+				String answer = servletConnection.getContentType();
+
+				if (answer.equalsIgnoreCase("Done")) {
+					JOptionPane.showMessageDialog(null, "Modificado");
+				} else {
+					JOptionPane
+							.showMessageDialog(null,
+									"¡Error! Algún fallo ocurrio durante la actualización");
+				}
+
+				servletConnection.disconnect();
+			} catch (MalformedURLException s) {
+				// TODO Auto-generated catch block
+				s.printStackTrace();
+			} catch (IOException s) {
+				// TODO Auto-generated catch block
+				s.printStackTrace();
+			}
+
 		} else {
 			// datos.eliminar(users.get(Integer.parseInt(e.getActionCommand().toString())));
-			int position = Integer.parseInt(e.getActionCommand().toString())-1;
+			int position = Integer.parseInt(e.getActionCommand().toString()) - 1;
 			Usuario user = new Usuario();
-			user.setNombre(this.textfield.get(position-2).getText().toString());
-			user.setApellidos(this.textfield.get(position-1).getText().toString());
+			user.setNombre(this.textfield.get(position - 2).getText()
+					.toString());
+			user.setApellidos(this.textfield.get(position - 1).getText()
+					.toString());
 			user.setEmail(this.textfield.get(position).getText().toString());
 			try {
 				URL gwtServlet = null;
@@ -165,10 +215,10 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 				objOut.writeInt(3);
 				objOut.writeObject(user);
 				objOut.flush();
-				objOut.close();		
-				
+				objOut.close();
+
 				String answer = servletConnection.getContentType();
-				
+
 				servletConnection.disconnect();
 			} catch (MalformedURLException s) {
 				// TODO Auto-generated catch block
@@ -178,14 +228,13 @@ public class ListaUsuarios extends JFrame implements ActionListener {
 				s.printStackTrace();
 			}
 
-			fondo.remove(this.textfield.get(position-2));
-			fondo.remove(this.textfield.get(position-1));
+			fondo.remove(this.textfield.get(position - 2));
+			fondo.remove(this.textfield.get(position - 1));
 			fondo.remove(this.textfield.get(position));
-			fondo.remove(this.deletes.get(position/3));
+			fondo.remove(this.deletes.get(position / 3));
 			fondo.repaint();
 			repaint();
-			
-			
+
 		}
 	}
 }

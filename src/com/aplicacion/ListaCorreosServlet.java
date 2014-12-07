@@ -75,7 +75,6 @@ public class ListaCorreosServlet extends HttpServlet {
 		}
 		
 		else if(codigo == 3){
-			System.out.println("Hola");
 			Usuario user = null;
 			try {
 				user = (Usuario) objIn.readObject();
@@ -85,6 +84,19 @@ public class ListaCorreosServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+		}
+		
+		else if(codigo == 4){
+			List<Usuario> newuser = null;
+			List<Usuario> user = null;
+			try {
+				newuser = (List<Usuario>) objIn.readObject();
+				user = (List<Usuario>) objIn.readObject();
+				datos.actualizar(user,newuser);
+				response.setContentType("Done");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
