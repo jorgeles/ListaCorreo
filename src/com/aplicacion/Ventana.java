@@ -30,7 +30,9 @@ import java.util.regex.Pattern;
 import javax.swing.JLabel;
 
 import java.awt.Color;
-
+/*
+ * Ventana inicial que permite acceder a las otras dos además de poder insertar un usuario en la base de datos
+ */
 public class Ventana extends JFrame {
 
 	private JPanel contentPane;

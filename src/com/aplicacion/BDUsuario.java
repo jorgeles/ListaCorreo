@@ -14,6 +14,9 @@ public class BDUsuario {
 	private static final String PERSISTENCE_UNIT_NAME = "ListaCorreo";
 	private EntityManagerFactory factoria;
 
+	/*
+	 * Indica si un email:String existe ya en la base de datos
+	 */
 	public boolean existeEmail(String email) {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
@@ -31,7 +34,9 @@ public class BDUsuario {
 		return false;
 
 	}
-
+	/*
+	 * Nos permite insertar un usuario:Usuario en la base de datos
+	 */
 	public void insertar(Usuario usuario) {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
@@ -47,6 +52,10 @@ public class BDUsuario {
 		em.close();
 	}
 
+	/*
+	 * Se utiliza para actualizar la base de datos.
+	 * Se le pasa una lista con los datos antiguos y otra con los datos actualizados
+	 */
 	public void actualizar(List<Usuario> usuario, List<Usuario> newusuario) {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
@@ -69,7 +78,10 @@ public class BDUsuario {
 			updateTransaction.commit();
 		}
 	}
-
+	
+	/*
+	 * Nos permite eliminar un usuario:Usuario de la base de datos
+	 */
 	public void eliminar(Usuario usuario) {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
@@ -91,11 +103,17 @@ public class BDUsuario {
 		em.close();
 	}
 
+	/*
+	 * No se utiliza en este programa
+	 */
 	public static Usuario seleccionarUsuario(String email) {
 		return null;
 		// ...
 	}
 
+	/*
+	 * Devuelve una lista con los datos de todos los usuarios existente en la base de datos
+	 */
 	public List<Usuario> mostrarUsuarios() {
 		factoria = Persistence
 				.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);

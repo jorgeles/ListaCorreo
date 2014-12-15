@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class ListaCorreosServlet
+ * Este el servidor que realiza todas la acciones de comunicación y hace de intermediario entre
+ * la base de datos y el cliente,
  */
 @WebServlet("/ListaCorreosServlet")
 public class ListaCorreosServlet extends HttpServlet {
@@ -40,6 +42,9 @@ public class ListaCorreosServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 *      Para comunicarse con el servlet primero hay que mandarle un int que indique que función
+	 *      queremos hacer y luego los datos correspondientes. Si los datos no van en ese orden o no son
+	 *      correctos el servlet devolvera un error 500
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -48,6 +53,9 @@ public class ListaCorreosServlet extends HttpServlet {
 		ObjectInputStream objIn = new ObjectInputStream(
 				request.getInputStream());
 		int codigo = objIn.readInt();
+		/*
+		 * Codigo para insertar el usuario
+		 */
 		if (codigo == 1) {
 			Usuario user = null;
 			try {
@@ -64,7 +72,9 @@ public class ListaCorreosServlet extends HttpServlet {
 			}
 
 		}
-
+		/*
+		 * Codigo para mostrar todos los usuarios
+		 */
 		else if (codigo == 2) {
 			List<Usuario> user = this.datos.mostrarUsuarios();
 			ObjectOutputStream objOut = new ObjectOutputStream(
@@ -73,7 +83,9 @@ public class ListaCorreosServlet extends HttpServlet {
 			objOut.flush();
 			objOut.close();
 		}
-
+		/*
+		 * Codigo para eliminar usuario
+		 */
 		else if (codigo == 3) {
 			Usuario user = null;
 			try {
@@ -85,7 +97,9 @@ public class ListaCorreosServlet extends HttpServlet {
 			}
 
 		}
-
+		/*
+		 * Codifo para actualizar usuarios
+		 */
 		else if (codigo == 4) {
 			List<Usuario> newuser = null;
 			List<Usuario> user = null;
@@ -98,7 +112,9 @@ public class ListaCorreosServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
+		/*
+		 * Codigo para enviar correo
+		 */
 		else if (codigo == 5) {
 			String email;
 			String SMTP;

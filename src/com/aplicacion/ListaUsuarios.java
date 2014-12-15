@@ -33,7 +33,9 @@ import java.util.List;
 import javax.swing.SpringLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
+/*
+ * Ventana que muestra listados todos los usuarios que existen en la base de datos
+ */
 public class ListaUsuarios extends JFrame implements ActionListener {
 
 	private JScrollPane scrollpane;

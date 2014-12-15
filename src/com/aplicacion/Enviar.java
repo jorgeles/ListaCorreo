@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+ * Ventana del programa que nos permite enviar un correo a todos los usuarios existentes en la base de datos
+ */
 public class Enviar extends JFrame {
 
 	private JPanel contentPane;
@@ -45,6 +48,9 @@ public class Enviar extends JFrame {
 	private JLabel lblIntroducir_1;
 	private JLabel lblIntroducir_2;
 
+	/*
+	 * String que contiene la estrucutra de un correo electronico
+	 */
 	private static final String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
@@ -151,6 +157,10 @@ public class Enviar extends JFrame {
 		btnEnviar.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
+				/*
+				 * Comprobamos que la estructura del correo introducido tiene la estrctura de un correo real
+				 * Ademas comprobamos que los field no estan vacios
+				 */
 				Matcher matcher = pattern.matcher(tfCorreo.getText());
 				boolean correcto = true;
 				if (tfCorreo.getText().isEmpty() || !matcher.matches()) {
@@ -213,6 +223,10 @@ public class Enviar extends JFrame {
 		contentPane.add(lblIntroducir_2);
 	}
 
+	/*
+	 * Función que llama al servidor indicandole que desea enviar un correo electronio.
+	 * Además le pasa todos los datos del cliente necearios para enviar el correo.
+	 */
 	public void EnviarCorreo(String email, String SMTP, String password,
 			String Asunto, String Texto) {
 		try {

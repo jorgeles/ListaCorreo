@@ -17,6 +17,10 @@ public class EnviadorMail {
 	private String asunto = null;
 	private String cuerpo = null;
 
+	/*
+	 * Esta funcion nos permite enviar una correo a la dirección que deseemos indicando
+	 * los datos de nuestra cuenta y la de destino.
+	 */
 	public void Enviar(String correo, String SMTP, String password,
 			String mailReceptor, String asunto, String cuerpo) {
 		this.miCorreo=correo;
